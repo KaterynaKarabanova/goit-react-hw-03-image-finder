@@ -9,6 +9,7 @@ export class App extends Component {
   state = {
     currentData: [],
     currentPage: 1,
+    total: 0,
     loading: false,
     currentImg: '',
     modalOpen: false,
@@ -23,7 +24,9 @@ export class App extends Component {
       .get(
         `https://pixabay.com/api/?q=cat&page=${this.state.currentPage}&key=39007131-7339e45b97efcc367872ff842&image_type=photo&orientation=horizontal&per_page=12&q=${value}`
       )
-      .then(data => this.setState({ currentData: data.data.hits }))
+      .then(data =>
+        this.setState({ currentData: data.data.hits, total: data.data.total })
+      )
       .catch(function (error) {
         console.log(error);
       })
@@ -39,7 +42,6 @@ export class App extends Component {
     e.preventDefault();
     this.setState({ currentPage: 1 });
     const value = e.target.elements.search.value;
-    console.log(value);
     this.setState({ toSearch: value });
     this.getData(value);
   };
@@ -48,7 +50,6 @@ export class App extends Component {
       this.setState({ currentImg: largeImageURL });
     }
     this.setState(({ modalOpen }) => ({ modalOpen: !modalOpen }));
-    console.log(this.state.modalOpen);
   };
   render() {
     return (
@@ -69,9 +70,10 @@ export class App extends Component {
 
         {this.state.loading && <Loader />}
 
-        {this.state.currentData?.length > 0 && (
-          <LoadMore loadMore={this.loadMore} />
-        )}
+        {this.state.currentData?.length > 0 &&
+          this.state.total / 12 > this.state.currentPage && (
+            <LoadMore loadMore={this.loadMore} />
+          )}
         {this.state.modalOpen && (
           <Modal
             currentImg={this.state.currentImg}
