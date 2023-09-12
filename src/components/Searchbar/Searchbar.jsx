@@ -7,16 +7,15 @@ import {
 export const Searchbar = ({ onSubmit }) => {
   return (
     <StyledHeader>
-      <StyledForm>
-        <StyledSearchBtn type="submit" class="button">
+      <StyledForm onSubmit={e => onSubmit(e)}>
+        <StyledSearchBtn type="submit">
           <span>Search</span>
         </StyledSearchBtn>
 
         <StyledInput
-          class="input"
           type="text"
-          autocomplete="off"
-          autofocus
+          name="search"
+          autoFocus
           placeholder="Search images and photos"
         />
       </StyledForm>

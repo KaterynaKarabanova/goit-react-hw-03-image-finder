@@ -1,8 +1,14 @@
 import { StyledGalleryItem, StyledGalleryImg } from './ImageGalleryItem.styled';
-export const ImageGalleryItem = () => {
+export const ImageGalleryItem = ({
+  id,
+  webformatURL,
+  largeImageURL,
+  alt,
+  toggleModal,
+}) => {
   return (
-    <StyledGalleryItem>
-      <StyledGalleryImg src="" alt="" />
+    <StyledGalleryItem id={id} onClick={() => toggleModal(largeImageURL)}>
+      <StyledGalleryImg src={webformatURL} alt={alt} />
     </StyledGalleryItem>
   );
 };
