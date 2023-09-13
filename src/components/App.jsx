@@ -5,7 +5,6 @@ import { Modal } from './Modal/Modal';
 import { Searchbar } from './Searchbar/Searchbar';
 import axios from 'axios';
 import React, { Component } from 'react';
-import Notiflix from 'notiflix';
 export class App extends Component {
   state = {
     currentData: [],
