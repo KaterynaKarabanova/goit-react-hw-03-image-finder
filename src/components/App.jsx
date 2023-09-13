@@ -27,10 +27,11 @@ export class App extends Component {
       this.setState({
         currentData: data.data.hits,
         total: data.data.total,
-        loading: false,
       });
     } catch (error) {
       console.error('An error occurred:', error);
+    } finally {
+      this.setState({ loading: false });
     }
   }
   loadMore = e => {
@@ -45,11 +46,12 @@ export class App extends Component {
 
   onSubmit = e => {
     e.preventDefault();
-    this.setState({ currentPage: (this.state.currentPage = 1) });
+    this.setState({ currentPage: 1 });
     console.log(this.state.currentPage);
     const value = e.target.elements.search.value;
     this.setState({ toSearch: value });
     this.getData(value);
+    e.target.reset();
   };
   toggleModal = largeImageURL => {
     if (largeImageURL) {
