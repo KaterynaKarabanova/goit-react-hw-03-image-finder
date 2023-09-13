@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import {
   StyledHeader,
   StyledSearchBtn,
@@ -21,4 +22,7 @@ export const Searchbar = ({ onSubmit }) => {
       </StyledForm>
     </StyledHeader>
   );
+};
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func,
 };

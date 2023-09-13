@@ -1,4 +1,5 @@
 import { StyledGalleryItem, StyledGalleryImg } from './ImageGalleryItem.styled';
+import PropTypes from 'prop-types';
 export const ImageGalleryItem = ({
   id,
   webformatURL,
@@ -11,4 +12,11 @@ export const ImageGalleryItem = ({
       <StyledGalleryImg src={webformatURL} alt={alt} />
     </StyledGalleryItem>
   );
+};
+ImageGalleryItem.propTypes = {
+  id: PropTypes.number,
+  webformatURL: PropTypes.string,
+  largeImageURL: PropTypes.string,
+  alt: PropTypes.string,
+  toggleModal: PropTypes.func,
 };

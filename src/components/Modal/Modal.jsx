@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { StyledModalOverlay, StyledModal } from './Modal.styled';
 import React, { Component } from 'react';
 export class Modal extends Component {
@@ -27,3 +28,7 @@ export class Modal extends Component {
     );
   }
 }
+Modal.propTypes = {
+  toggleModal: PropTypes.func,
+  currentImg: PropTypes.string,
+};
