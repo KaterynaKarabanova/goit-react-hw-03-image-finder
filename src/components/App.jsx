@@ -5,6 +5,7 @@ import { Modal } from './Modal/Modal';
 import { Searchbar } from './Searchbar/Searchbar';
 import axios from 'axios';
 import React, { Component } from 'react';
+import Notiflix from 'notiflix';
 export class App extends Component {
   state = {
     currentData: [],
@@ -16,31 +17,37 @@ export class App extends Component {
     toSearch: '',
   };
   componentDidMount() {
-    setTimeout(this.getData(' '), 1000);
+    this.getData('');
   }
-  getData = value => {
+  async getData(value) {
     this.setState({ loading: true });
-    axios
-      .get(
+    try {
+      const data = await axios.get(
         `https://pixabay.com/api/?q=cat&page=${this.state.currentPage}&key=39007131-7339e45b97efcc367872ff842&image_type=photo&orientation=horizontal&per_page=12&q=${value}`
-      )
-      .then(data =>
-        this.setState({ currentData: data.data.hits, total: data.data.total })
-      )
-      .catch(function (error) {
-        console.log(error);
-      })
-      .finally(() => this.setState({ loading: false }));
-  };
+      );
+      this.setState({
+        currentData: data.data.hits,
+        total: data.data.total,
+        loading: false,
+      });
+    } catch (error) {
+      console.error('An error occurred:', error);
+    }
+  }
   loadMore = e => {
     e.preventDefault();
-    this.setState(prev => ({ currentPage: prev.currentPage + 1 }));
-    this.getData(this.state.toSearch);
+    this.setState(
+      prevState => ({ currentPage: prevState.currentPage + 1 }),
+      () => {
+        this.getData(this.state.toSearch);
+      }
+    );
   };
 
   onSubmit = e => {
     e.preventDefault();
-    this.setState({ currentPage: 1 });
+    this.setState({ currentPage: (this.state.currentPage = 1) });
+    console.log(this.state.currentPage);
     const value = e.target.elements.search.value;
     this.setState({ toSearch: value });
     this.getData(value);
