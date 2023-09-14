@@ -15,8 +15,13 @@ export class App extends Component {
     modalOpen: false,
     toSearch: '',
   };
-  componentDidMount() {
-    this.getData('');
+  componentDidUpdate(_, prevState) {
+    if (
+      prevState.currentPage !== this.state.currentPage ||
+      prevState.toSearch !== this.state.toSearch
+    ) {
+      this.getData(this.state.toSearch);
+    }
   }
   async getData(value) {
     this.setState({ loading: true });
@@ -25,9 +30,11 @@ export class App extends Component {
         `https://pixabay.com/api/?q=cat&page=${this.state.currentPage}&key=39007131-7339e45b97efcc367872ff842&image_type=photo&orientation=horizontal&per_page=12&q=${value}`
       );
       this.setState({
-        currentData: data.data.hits,
         total: data.data.total,
       });
+      this.setState(prevState => ({
+        currentData: [...prevState.currentData, ...data.data.hits],
+      }));
     } catch (error) {
       console.error('An error occurred:', error);
     } finally {
@@ -36,21 +43,14 @@ export class App extends Component {
   }
   loadMore = e => {
     e.preventDefault();
-    this.setState(
-      prevState => ({ currentPage: prevState.currentPage + 1 }),
-      () => {
-        this.getData(this.state.toSearch);
-      }
-    );
+    this.setState(prevState => ({ currentPage: prevState.currentPage + 1 }));
   };
 
   onSubmit = e => {
     e.preventDefault();
     this.setState({ currentPage: 1 });
-    console.log(this.state.currentPage);
     const value = e.target.elements.search.value;
-    this.setState({ toSearch: value });
-    this.getData(value);
+    this.setState({ toSearch: value, currentPage: 1, currentData: [] });
     e.target.reset();
   };
   toggleModal = largeImageURL => {
